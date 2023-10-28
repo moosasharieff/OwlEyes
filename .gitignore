@@ -1,0 +1,10 @@
+
+# database
+db.sqlite3
+
+# Misc Files
+OwlEyes/__pycache__/
+scrapper/__pycache__/
+scrapper/migrations/
+.idea/
+*pyc
