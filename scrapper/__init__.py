@@ -10,3 +10,4 @@ print('Alhamdulillah, identified that GitHub WebHook will not work on local mach
 print('Alhamdulillah, corrected the config in GitHub. Insha Allah, it will work now.')
 print('Alhamdulillah, GitHub & Jenkins connection is working! Masha Allah, made the connection to Jenkins and Jira now.'
       'Insha Allah, this will also work as expected.')
+print('Alhamdulillah, enabled automatic build notification from Jenkins to Jira. Insha Allah, it should work now.')
