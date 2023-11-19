@@ -1,0 +1,157 @@
+
+
+Resources:
+  TestVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "192.0.0.0/24"
+      Tags:
+        - Key: Name
+          Value: Development
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref TestVPC
+      CidrBlock: "192.0.0.0/26"
+      AvailabilityZone: "us-east-2a"
+      MapPublicIpOnLaunch: true
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref TestVPC
+      CidrBlock: "192.0.0.65/26"
+      AvailabilityZone: "us-east-2a"
+      
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref TestVPC
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref TestVPC
+
+  PrivateSubnetRoutingConnection:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet
+      RouteTableId: !Ref PrivateRouteTable
+
+  PublicSubnetRoutingConnection:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  InternetGatewayInitiation:
+    Type: AWS::EC2::InternetGateway
+
+  InternetGatewayConnection:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref TestVPC
+      InternetGatewayId: !Ref InternetGatewayInitiation
+
+  PublicAccess:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayConnection
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGatewayInitiation
+
+  NatGatewayEIP:
+    Type: AWS::EC2::EIP
+
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGatewayEIP.AllocationId
+      SubnetId: !Ref PrivateSubnet
+
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway
+
+  JumpServerSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH Access and provide http access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref MoosaIP
+      VpcId: !Ref TestVPC
+
+  JumpServerEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      KeyName: MindDump_KeyPair
+      ImageId: ami-0e83be366243f524a
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: JumpServerEC2Instance
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt update -y 
+          apt install nginx -y
+          service nginx start
+      NetworkInterfaces:
+        - GroupSet:
+            - !Ref JumpServerSecurityGroup
+          AssociatePublicIpAddress: true
+          SubnetId: !Ref PublicSubnet
+          DeviceIndex: 0
+          PrivateIpAddress: '192.0.0.50'
+
+  InternalServerSecurityGroup1:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH Access From Jump Server
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 192.0.0.50/32 # only this ip from Jump Server can connect
+      VpcId: !Ref TestVPC
+
+  InternalServerEC2Instance1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      KeyName: MindDump_KeyPair
+      ImageId: ami-0e83be366243f524a
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: InternalServer1
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt update -y 
+          apt install nginx -y
+          service nginx start
+      NetworkInterfaces:
+        - GroupSet:
+            - !Ref InternalServerSecurityGroup1
+          SubnetId: !Ref PrivateSubnet
+          DeviceIndex: 0
+          PrivateIpAddress: '192.0.0.70'
+
+Parameters:
+  MoosaIP:
+    Description: The IP address range that can be used to SSH to the EC2 instances.
+    Type: String
+    Default: '0.0.0.0/0'
+    MaxLength: '18'
+    MinLength: '9'
+    AllowedPattern: '(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})'
+    ConstraintDescription: Must have IP range between 9 to 18 digits.
