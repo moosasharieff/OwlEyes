@@ -1,0 +1,93 @@
+
+
+pipeline {
+        agent any
+
+            stages {
+                stage ('Checkout') {
+                    steps {
+                        echo 'cloning git repository'
+                        checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
+                    }
+                }
+
+                stage ('Installing Dependencies') {
+                    steps {
+                        echo 'installing package requirements'
+                        sh 'pip3 install -r requirements.txt'
+                    }
+                }
+
+                stage ('Test') {
+                    // Performing tests
+                    stages {
+                        stage ('Unit Tests') {
+                            steps {
+                                echo 'Performing Unit Tests inside docker'
+                                // Add test commands here
+                            }
+                        }
+
+                        stage ('UI Tests') {
+                            steps {
+                                echo 'Performing UI Tests via Selenium'
+                                // Add test commands here
+                            }
+                        }
+                    }
+
+                }
+
+                stage ('Deployment') {
+                    stages {
+                        stage ('Merge') {
+                            steps {
+                                echo 'Merging dev branch with main branch'
+                                // Figure out a way to pause here and post
+                                // merging of branching, deployment continues
+                                // in main branch
+                            }
+                        }
+
+                        stage ('Docker Build'){
+                            steps {
+                                echo 'Building Docker Container'
+                                // add docker build container command here
+                            }
+                        }
+
+                        stage ('Deploy') {
+                            steps {
+                                echo 'Launching Docker Container'
+                                // add docker command to launch the container
+                            }
+                        }
+
+                        stage ('Nginx Rebooted') {
+                            steps {
+                                echo 'Restart Nginx'
+                                // add docker command to launch the container
+                                // sudo systemctl restart nginx
+                            }
+                       }
+                    }
+                }
+                stage ('Monitoring') {
+                    stages {
+                        stage ('Slack Notification') {
+                            steps {
+                                echo 'Final notification sent to Slack'
+                                // add commands to notify Slack from Jenkins
+                            }
+                        }
+
+                    stage ('JIRA Notified') {
+                        steps {
+                            echo 'Updated JIRA with Status'
+                            // add commands to notify JIRA from Jenkins
+                        }
+                    }
+                }
+            }
+        }
+    }
