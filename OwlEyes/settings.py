@@ -14,6 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+SCRAPPER_DIR = Path.joinpath(BASE_DIR, 'scrapper/templates/')
 
 
 # Quick-start development settings - unsuitable for production
@@ -55,7 +56,9 @@ ROOT_URLCONF = 'OwlEyes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'templates',
+                 SCRAPPER_DIR,
+                 ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
