@@ -5,32 +5,50 @@ pipeline {
 
             stages {
                 stage ('Checkout') {
+
+                    stages {
+                        stage ('Git Pull') {
+                            steps {
+                                echo 'cloning git repository'
+                                checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
+                            }
+                        }
+
+                        stage ('Jenkins Files Updates') {
+                            steps {
+                                echo 'Reading Jenkins file and processing pipeline'
+                                // command to update JIRA
+                            }
+                        }
+
+                        stage ('JIRA Updated') {
+                            steps {
+                                echo 'Updating JIRA Issue'
+                                // command to update JIRA
+                            }
+                        }
+                    }
+
+
+                }
+
+                stage ('Build') {
                     steps {
-                        echo 'cloning git repository'
-                        checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
+                        echo 'Building Docker image'
+                        sh "screen -dmS new bash -c 'pytho3 manage.py runserver'"
+                        //sh 'su docker'
+                       // sh 'docker build -t owleyes-app .'
+                        // echo 'Running Docker image'
+                        // sh 'sudo docker run -it -d -p 8000:8000 owleyes-app'
                     }
                 }
 
-                stage ('Installing Dependencies') {
-                    steps {
-                        echo 'installing package requirements'
-                        sh 'pip3 install -r requirements.txt'
-                    }
-                }
-
-                stage ('Test') {
+                stage ('Staging') {
                     // Performing tests
                     stages {
                         stage ('Unit Tests') {
                             steps {
                                 echo 'Performing Unit Tests inside docker'
-                                // Add test commands here
-                            }
-                        }
-
-                        stage ('UI Tests') {
-                            steps {
-                                echo 'Performing UI Tests via Selenium'
                                 // Add test commands here
                             }
                         }
@@ -60,6 +78,10 @@ pipeline {
                             steps {
                                 echo 'Launching Docker Container'
                                 // add docker command to launch the container
+                                //sh 'python3 manage.py migrate'
+                                //sh 'python3 manage.py makemigrations'
+                                //sh 'python3 manage.py migrate'
+                                //sh 'python3 manage.py runserver'
                             }
                         }
 
@@ -67,7 +89,7 @@ pipeline {
                             steps {
                                 echo 'Restart Nginx'
                                 // add docker command to launch the container
-                                // sudo systemctl restart nginx
+                                // sh 'sudo systemctl restart nginx'
                             }
                        }
                     }
