@@ -1,8 +1,0 @@
-helloworld.py
-setup.py
-OwlEyes.egg-info/PKG-INFO
-OwlEyes.egg-info/SOURCES.txt
-OwlEyes.egg-info/dependency_links.txt
-OwlEyes.egg-info/namespace_packages.txt
-OwlEyes.egg-info/top_level.txt
-OwlEyes.egg-info/zip-safe
