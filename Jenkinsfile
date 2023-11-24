@@ -51,6 +51,13 @@ pipeline {
                             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                         }
                     }
+
+                    // Sending notification JIRA about build status
+                    post {
+                          always {
+                            jiraSendBuildInfo site: 'moosasharieff.atlassian.net', branch: 'EYES-2-CI-CD'
+                          }
+                        }
         }
     }
 }
