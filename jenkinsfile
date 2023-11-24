@@ -41,10 +41,11 @@ pipeline {
 
                 stage ('Build') {
                     steps {
-                        echo 'Building Docker image'
-                        sh "screen -dmS new bash -c 'pytho3 manage.py runserver'"
+                        echo 'Building using PyBuilder'
+                        sh 'pyb -v'
+                        // sh "screen -dmS new bash -c 'pytho3 manage.py runserver'"
                         //sh 'su docker'
-                       // sh 'docker build -t owleyes-app .'
+                        // sh 'docker build -t owleyes-app .'
                         // echo 'Running Docker image'
                         // sh 'sudo docker run -it -d -p 8000:8000 owleyes-app'
                     }

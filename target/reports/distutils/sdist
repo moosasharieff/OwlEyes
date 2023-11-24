@@ -1,5 +1,4 @@
 running clean
-'build/temp.macosx-10.9-universal2-cpython-310' does not exist -- can't clean it
 'build/lib' does not exist -- can't clean it
 'build/bdist.macosx-10.9-universal2' does not exist -- can't clean it
 'build/scripts-3.10' does not exist -- can't clean it
@@ -27,11 +26,6 @@ copying OwlEyes.egg-info/dependency_links.txt -> OwlEyes-1.0.dev0/OwlEyes.egg-in
 copying OwlEyes.egg-info/namespace_packages.txt -> OwlEyes-1.0.dev0/OwlEyes.egg-info
 copying OwlEyes.egg-info/top_level.txt -> OwlEyes-1.0.dev0/OwlEyes.egg-info
 copying OwlEyes.egg-info/zip-safe -> OwlEyes-1.0.dev0/OwlEyes.egg-info
-not copying OwlEyes.egg-info/SOURCES.txt (output up-to-date)
-Reading configuration from OwlEyes-1.0.dev0/setup.cfg
-Adding new section [egg_info] to OwlEyes-1.0.dev0/setup.cfg
-Setting egg_info.tag_build to '' in OwlEyes-1.0.dev0/setup.cfg
-Setting egg_info.tag_date to 0 in OwlEyes-1.0.dev0/setup.cfg
 Writing OwlEyes-1.0.dev0/setup.cfg
 creating dist
 Creating tar archive

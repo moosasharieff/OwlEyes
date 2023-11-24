@@ -1,5 +1,4 @@
 running clean
-'build/temp.macosx-10.9-universal2-cpython-310' does not exist -- can't clean it
 'build/lib' does not exist -- can't clean it
 'build/bdist.macosx-10.9-universal2' does not exist -- can't clean it
 'build/scripts-3.10' does not exist -- can't clean it
@@ -37,12 +36,6 @@ writing top-level names to OwlEyes.egg-info/top_level.txt
 reading manifest file 'OwlEyes.egg-info/SOURCES.txt'
 writing manifest file 'OwlEyes.egg-info/SOURCES.txt'
 Copying OwlEyes.egg-info to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info
-Copying PKG-INFO to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info/PKG-INFO
-Copying zip-safe to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info/zip-safe
-Copying namespace_packages.txt to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info/namespace_packages.txt
-Copying SOURCES.txt to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info/SOURCES.txt
-Copying top_level.txt to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info/top_level.txt
-Copying dependency_links.txt to build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0-py3.10.egg-info/dependency_links.txt
 running install_scripts
 creating build/bdist.macosx-10.9-universal2/wheel/OwlEyes-1.0.dev0.dist-info/WHEEL
 creating 'dist/OwlEyes-1.0.dev0-py3-none-any.whl' and adding 'build/bdist.macosx-10.9-universal2/wheel' to it
