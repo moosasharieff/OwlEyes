@@ -6,18 +6,18 @@ pipeline {
             stages {
                 stage ('Checkout') {
 
+                    stage ('Polling Jenkinsfiles') {
+                        steps {
+                            echo 'Reading Jenkins file and processing pipeline'
+                            // command to update JIRA
+                        }
+                    }
+
                     stages {
                         stage ('Git Pull') {
                             steps {
                                 echo 'cloning git repository'
                                 checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
-                            }
-                        }
-
-                        stage ('Jenkins Files Updates') {
-                            steps {
-                                echo 'Reading Jenkins file and processing pipeline'
-                                // command to update JIRA
                             }
                         }
 
