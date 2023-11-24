@@ -4,20 +4,27 @@ pipeline {
         agent any
 
             stages {
-                stage ('Checkout') {
 
-                    stage ('Polling Jenkinsfiles') {
-                        steps {
-                            echo 'Reading Jenkins file and processing pipeline'
-                            // command to update JIRA
-                        }
-                    }
-
+                stage ('Setup Config') {
+                    // Setting up Pipelines and Environment
                     stages {
+                        stage ('Polling Jenkinsfile') {
+                            steps {
+                                echo 'Reading Jenkins file and processing pipeline'
+                            }
+                        }
+
                         stage ('Git Pull') {
                             steps {
                                 echo 'cloning git repository'
                                 checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
+                            }
+                        }
+
+                        stage ('Installing Dependencies') {
+                            steps {
+                                echo 'installing package requirements'
+                                sh 'pip3 install -r requirements.txt'
                             }
                         }
 
@@ -27,8 +34,8 @@ pipeline {
                                 // command to update JIRA
                             }
                         }
-                    }
 
+                    }
 
                 }
 
