@@ -49,15 +49,16 @@ pipeline {
 
                             archiveArtifacts "${env.BUILD_ID}/sources/dist/add2vals"
                             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
+
+                            //
+                            jiraSendBuildInfo site: 'moosasharieff.atlassian.net', branch: 'EYES-2-CI-CD'
+                        }
+
+                        always {
+                            // Sending notification JIRA about build status
+                            jiraSendBuildInfo site: 'moosasharieff.atlassian.net', branch: 'EYES-2-CI-CD'
                         }
                     }
-
-                    // Sending notification JIRA about build status
-                    post {
-                          always {
-                            jiraSendBuildInfo site: 'moosasharieff.atlassian.net', branch: 'EYES-2-CI-CD'
-                          }
-                        }
         }
     }
 }
