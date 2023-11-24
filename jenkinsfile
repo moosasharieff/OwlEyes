@@ -17,7 +17,7 @@ pipeline {
                         stage ('Git Pull') {
                             steps {
                                 echo 'cloning git repository'
-                                checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
+                                checkout scmGit(branches: [[name: '*/test']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/moosasharieff/OwlEyes']])
                             }
                         }
 
