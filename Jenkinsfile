@@ -5,6 +5,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
+                    // Using below docker image
                     image 'python:2-alpine'
                 }
             }
@@ -14,13 +15,15 @@ pipeline {
                 stash(name: 'compiled-results', includes: 'sources/*.py*')
             }
         }
-        stage('Test') {
+        stage('Staging') {
             agent {
                 docker {
+                    // using pytest image for running tests inside docker image
                     image 'qnib/pytest'
                 }
             }
             steps {
+                // running tests
                 sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
             }
             post {
@@ -51,6 +54,14 @@ pipeline {
                             sh "docker run --rm -v ${VOLUME} ${IMAGE} 'rm -rf build dist'"
                         }
                     }
+
+                    // Send successful build status to JIRA
+                    post {
+                        always {
+                            jiraSendBuildInfo site: 'moosasharieff.atlassian.net', branch: 'EYES-2-CI-CD'
+                            }
+                        }
+
         }
     }
 }
